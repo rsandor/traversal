@@ -1,13 +1,12 @@
 'use strict';
 
 var traversal = require('./lib/traversal.js');
-var exists = require('101/exists');
 
 /* jshint ignore:start */
-if (exists(window)) {
+if (typeof window !== 'undefined') {
   window.traversal = traversal;
 }
-else if (exists(module)) {
+else if (typeof module !== 'undefined') {
   module.exports = traversal;
 }
 /* jshint ignore:end */
