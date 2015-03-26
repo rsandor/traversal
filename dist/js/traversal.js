@@ -1,18 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
+window.traverse = require('./lib/traversal.js');
 
-var traversal = require('./lib/traversal.js');
-var exists = require('101/exists');
-
-/* jshint ignore:start */
-if (exists(window)) {
-  window.traversal = traversal;
-}
-else if (exists(module)) {
-  module.exports = traversal;
-}
-/* jshint ignore:end */
-},{"./lib/traversal.js":3,"101/exists":4}],2:[function(require,module,exports){
+},{"./lib/traversal.js":3}],2:[function(require,module,exports){
 'use strict';
 
 /* @module traversal */
@@ -44,7 +34,8 @@ function Recur(traversal, parent, depth) {
       return a + b;
     },
     reduceInitial: '',
-    depth: depth
+    depth: depth,
+    parent: parent
   };
 
   for (var name in Recur.prototype) {
@@ -84,17 +75,19 @@ Recur.prototype.setReduceInitial = function(initial) {
  * @param {Number} [givenDepth] Traversal depth override.
  */
 Recur.prototype.each = function(list, givenDepth) {
+  var recur = this;
   if (!givenDepth) {
     givenDepth = this._options.depth + 1;
   }
-
-  var recur = this;
   return list.map(function (node) {
     return recur(node, givenDepth);
   }).reduce(function (left, right) {
     return recur._options.reduce(left, right);
   }, "");
 };
+
+module.exports = Recur;
+
 
 },{}],3:[function(require,module,exports){
 'use strict';
@@ -104,6 +97,7 @@ Recur.prototype.each = function(list, givenDepth) {
 var exists = require('101/exists');
 var debug = require('debug');
 var Recur = require('./recur.js');
+
 var warning = debug('traversal:warning');
 
 /**
@@ -346,7 +340,7 @@ TreeTraversal.prototype.run = TreeTraversal.prototype.walk;
  *  to add helper methods to the tree traversal.
  * @return {TreeTraversal} a new tree traversal.
  */
-function traverse(helpers) {
+function createTraversal(helpers) {
   var traversal = new TreeTraversal();
   if (exists(helpers) && Array.isArray(helpers)) {
     helpers.forEach(function(propertyName) {
@@ -367,7 +361,7 @@ function traverse(helpers) {
  */
 
 // Export the factory method.
-module.exports = traverse;
+module.exports = createTraversal;
 
 },{"./recur.js":2,"101/exists":4,"debug":5}],4:[function(require,module,exports){
 /**

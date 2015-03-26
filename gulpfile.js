@@ -46,7 +46,7 @@ gulp.task('lint', function() {
  * `dist/js/` directory.
  */
 gulp.task('js', ['lint'], function() {
-  return gulp.src('./index.js')
+  return gulp.src('./dist.js')
     .pipe(browserified)
     .pipe(rename({ basename: 'traversal' }))
     .pipe(gulp.dest(dir.js))
