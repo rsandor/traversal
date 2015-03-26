@@ -6,10 +6,13 @@ var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
-var ignore = require('gulp-ignore');
 var exists = require('101/exists');
 var browserify = require('browserify');
 var transform = require('vinyl-transform');
+var gutil = require('gulp-util');
+var jsdoc2md = require('gulp-jsdoc-to-markdown');
+var concat = require("gulp-concat");
+
 var packageJSON = require('./package.json');
 
 /**
@@ -45,10 +48,24 @@ gulp.task('lint', function() {
 gulp.task('js', ['lint'], function() {
   return gulp.src('./index.js')
     .pipe(browserified)
-    .pipe(rename({ basename: 'notex' }))
+    .pipe(rename({ basename: 'traversal' }))
     .pipe(gulp.dest(dir.js))
     .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest(dir.js));
 });
+
+/**
+ * Builds markdown documentation for the project.
+ *
+gulp.task("docs", function() {
+  return gulp.src("lib/*.js")
+    .pipe(concat("api.md"))
+    .pipe(jsdoc2md())
+    .on("error", function(err){
+        gutil.log("jsdoc2md failed:", err.message);
+    })
+    .pipe(gulp.dest("api"));
+});
+*/

@@ -1,0 +1,51 @@
+{
+  "name": "traversal",
+  "version": "1.0.0",
+  "description": "Modular recursive tree traversals.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'NOT IMPLEMENTED'",
+    "build": "gulp js",
+    "docs": "jsdoc -o docs lib/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rsandor/traversal.git"
+  },
+  "keywords": [
+    "tree",
+    "traversal"
+  ],
+  "author": "Ryan Sandor Richards <sandor.richards@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rsandor/traversal/issues"
+  },
+  "homepage": "https://github.com/rsandor/traversal",
+  "jshintConfig": {
+    "node": true,
+    "curly": true
+  },
+  "devDependencies": {
+    "array-tools": "^1.6.6",
+    "browserify": "^9.0.3",
+    "concat": "^1.0.0",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-jsdoc-to-markdown": "^0.1.7",
+    "gulp-jshint": "^1.9.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^1.5.1",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.4",
+    "jsdoc": "^3.0.0",
+    "jshint": "^2.6.3",
+    "jshint-stylish": "^1.0.1",
+    "object-tools": "^1.2.2",
+    "vinyl-transform": "^1.0.0"
+  },
+  "dependencies": {
+    "101": "^0.14.1",
+    "debug": "^2.1.3"
+  }
+}
