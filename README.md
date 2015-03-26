@@ -6,108 +6,51 @@ By Ryan Sandor Richards
 
 ## Introduction
 
-Traversals, being a fundamental tree algorithm, occur in many contexts. This library aims to make them easier to write and read in JavaScript.
+The [tree traversal](http://en.wikipedia.org/wiki/Tree_traversal) is a fundamental problem in computer science and it occurs in many contexts (e.g. compilers). This library aims to make them easier to write and read in JavaScript.
 
 ## Usage
 
-Let us start with an example. First, consider the following tree structure using objects in javascript:
+Traversal works by holding the computational state of a tree traversal in the form of an JavaScript class. The library exposes a single factory method, `traversal()`, that creates a new instance and allows you to override its default behaviors.
+
+Here's an example of how it might be used:
 
 ```js
+// 1. Require the library
+var traversal = require('traversal');
+
+// 2. Format a tree using nest objects
 var myTree = {
-  type: 'root',
+  name: 'root',
   left: {
-    type: 'left child',
-    right: {
-      type: 'left right child'
-    }
+    name: 'left child'
+
   },
-  right {
-    type: 'lonely right child'
+  right: {
+    name: 'right child'
   }
 };
+
+// 3. Build a traversal that prints out node names and
+//    recursively follows the `left` and `right` properties.
+var logger = traversal()
+  .visit(function(node) { console.log(node); })
+  .preorder('left', 'right');
+
+// 4. Execute the traversal by calling `walk`
+logger.walk(myTree);
 ```
 
-And a recursive traversal algorithm to walk the tree and print out the node types (with some whitespace to denote the depth of each node):
-
-```js
-function treeWalk(node, depth) {
-  depth = depth || 0;
-
-  var msg = "";
-  for (int i = 0; i < depth; i++) {
-    msg += "    ";
-  }
-  console.log(msg + node.type);
-
-  if (node.left) {
-    treeWalk(node.left, depth+1);
-  }
-  if (node.right) {
-    treeWalk(node.right, depth+1);
-  }
-}
-```
-
-Running `treeWalk(myTree)` give you the following result:
+This particular traversal would output the following:
 
 ```
 root
-    left child
-        left right child
-    lonely right child
+left child
+right child
 ```
 
-With me so far? If not you might want to [read about traversals](http://en.wikipedia.org/wiki/Tree_traversal). If you are then let's see how we might implement this using `traversal`:
+## Documentation
 
-```js
-var traversal = require('traversal');
-
-traversal()
-  .visit(function(node, recur, depth) {
-    var msg = "";
-    for (int i = 0; i < depth; i++) {
-      msg += "    ";
-    }
-    console.log(msg + node.type);
-  })
-  .preorder('left', 'right')
-  .walk(myTree);
-```
-
-So what's the big deal? Well a couple of things:
-
-1. The code is shorter and more readable
-2. We don't have to eplicitly call our recursive method, `.preorder('left', 'right')` does this for us.
-
-In larger more complex recursive traversals these two points can become quite the pain (leading to weird external method calls and massive switch statements). Because each piece is explicitly defined via the library it is easy to simple modularize various aspects of the traversal.
-
-For instance, what if we wanted to use a third party logger? It might go a little something like this:
-
-```js
-var traversal = require('traversal');
-var logVisit = require('./lib/log-visit.js');
-traversal()
-  .visit(logVisit)
-  .preorder('left', 'right')
-  .walk(myTree);
-
-```
-
-Then if we wanted to perform a different action given certain types of nodes we could further modify the traversal, like this:
-
-```javascript
-var traversal = require('traversal');
-var logVisit = require('./lib/log-visit.js');
-traversal()
-  .visit(logVisit)
-  .preorder('left', 'right')
-  .property('type', 'root', function(node) {
-    console.log("THIS IS ROOT WOOO");
-  })
-  .walk(myTree);
-```
-
-Full documentation coming soon!
+Markdown documentation for the library is coming soon. For now you can fork and build the jsdoc documentation by running `npm install && npm run docs`. Then open the `docs/index.html` file in a web browser.
 
 
 ## License
