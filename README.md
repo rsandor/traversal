@@ -25,8 +25,9 @@ var myTree = {
     type: 'lonely right child'
   }
 };
+```
 
-And a recurive traversal algorith to walk the tree and print out the node types (with some whitespace to denote the depth of each node):
+And a recursive traversal algorithm to walk the tree and print out the node types (with some whitespace to denote the depth of each node):
 
 ```js
 function treeWalk(node, depth) {
@@ -89,11 +90,12 @@ traversal()
   .visit(logVisit)
   .preorder('left', 'right')
   .walk(myTree);
+
 ```
 
 Then if we wanted to perform a different action given certain types of nodes we could further modify the traversal, like this:
 
-```js
+```javascript
 var traversal = require('traversal');
 var logVisit = require('./lib/log-visit.js');
 traversal()
