@@ -50,8 +50,25 @@ right child
 
 ## Documentation
 
-Markdown documentation for the library is coming soon. For now you can fork and build the jsdoc documentation by running `npm install && npm run docs`. Then open the `docs/index.html` file in a web browser.
+### traversal([helpers])
 
+Instantiates a new tree traversal object.
+
+#### Parameters
+
+* helpers (*Array*, optional) - List of node properties for which to make helper
+  methods.
+
+#### Example
+```js
+var myTraversal = traversal(['type'])
+  .type('root', function (node) {
+    console.log('The root node!');
+  })
+  .visit(function (node) {
+    console.log('Just another node...');
+  });
+```
 
 ## License
 MIT
