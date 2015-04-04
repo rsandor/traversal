@@ -1,0 +1,25 @@
+{
+  "name": "traversal",
+  "main": "dist/js/traversal.js",
+  "version": "1.2.0",
+  "homepage": "https://github.com/rsandor/traversal",
+  "authors": [
+    "Ryan Sandor Richards <sandor.richards@gmail.com>"
+  ],
+  "description": "Modular recursive tree traversals.",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "tree",
+    "traversal"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

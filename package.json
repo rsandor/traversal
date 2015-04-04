@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "array-tools": "^1.6.6",
+    "bower": "^1.4.1",
     "browserify": "^9.0.3",
     "code": "^1.4.0",
     "concat": "^1.0.0",

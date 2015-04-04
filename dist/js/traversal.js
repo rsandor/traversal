@@ -5,10 +5,16 @@ window.traverse = require('./lib/traversal.js');
 },{"./lib/traversal.js":3}],2:[function(require,module,exports){
 'use strict';
 
-/* @module traversal */
+/**
+ * @module traversal
+ * @author Ryan Sandor Richards
+ */
+
+module.exports = Recur;
 
 /**
- * @class Recursive traversal callback for a given node at a given depth.
+ * Recursive traversal callback for a given node at a given depth.
+ * @class
  * @author Ryan Sandor Richards
  * @param {Object} parent Parent node of the recur.
  * @param {Number} depth Depth of the parent node.
@@ -44,6 +50,10 @@ function Recur(traversal, parent, depth) {
 
   return recur;
 }
+
+Recur.prototype.getOption = function (name) {
+  return this._options[name];
+};
 
 /**
  * Stop automatic traversal for names defined with `TreeTraversal.preorder`
@@ -83,21 +93,20 @@ Recur.prototype.each = function(list, givenDepth) {
     return recur(node, givenDepth);
   }).reduce(function (left, right) {
     return recur._options.reduce(left, right);
-  }, "");
+  }, recur._options.reduceInitial);
 };
-
-module.exports = Recur;
-
 
 },{}],3:[function(require,module,exports){
 'use strict';
 
-/* @module traversal */
+/**
+ * @module traversal
+ * @author Ryan Sandor Richards
+ */
 
 var exists = require('101/exists');
 var debug = require('debug');
 var Recur = require('./recur.js');
-
 var warning = debug('traversal:warning');
 
 /**
@@ -112,14 +121,13 @@ function TreeTraversal() {
 }
 
 /**
- * Given a traversal and a node, this method find the appropriate
- * visitor for the node.
+ * Given a traversal and a node, this method find the appropriate visitor for
+ * the node.
  * @private
- * @param {TreeTraversal} traversal Traversal the contains the
- *  visitor.
+ * @param {TreeTraversal} traversal Traversal the contains the visitor.
  * @param  {Object} node Node for which to find the visitor.
- * @return {TreeTraversal~visitorCallback} The visitor for the node
- *  or the default visitor if no, more specific, one could be found.
+ * @return {TreeTraversal~visitorCallback} The visitor for the node or the
+ *   default visitor if no, more specific, one could be found.
  */
 function findVisitor(traversal, node) {
   var visitor = traversal.visitor;
@@ -275,13 +283,18 @@ TreeTraversal.prototype.walk = function(node, depth) {
   // TODO Going to need a way to turn this off as a special case.
   this.postorderProperties.forEach(function(name) {
     if (exists(node[name])) {
-      recur(node[name], depth);
+      if (Array.isArray(node[name])) {
+        recur.each(node[name], depth+1);
+      }
+      else {
+        recur(node[name], depth+1);
+      }
     }
   });
 
   var result = visitor.call(this, node, recur, depth);
 
-  if (recur.performAutoTraversal) {
+  if (recur.getOption('autoTraverse')) {
     this.preorderProperties.forEach(function(name) {
       if (exists(node[name])) {
         if (Array.isArray(node[name])) {
@@ -344,11 +357,13 @@ function createTraversal(helpers) {
   var traversal = new TreeTraversal();
   if (exists(helpers) && Array.isArray(helpers)) {
     helpers.forEach(function(propertyName) {
-      traversal.addHelper(propertyName);
+      traversal.addPropertyHelper(propertyName);
     });
   }
   return traversal;
 }
+
+createTraversal.TreeTraversal = TreeTraversal;
 
 // Callback descriptions
 
@@ -360,8 +375,7 @@ function createTraversal(helpers) {
  * @param {Number} depth Current depth of the traversal.
  */
 
-// Export the factory method.
-module.exports = createTraversal;
+ module.exports = createTraversal;
 
 },{"./recur.js":2,"101/exists":4,"debug":5}],4:[function(require,module,exports){
 /**
