@@ -1,15 +1,11 @@
 # Traversal
+By Ryan Sandor Richards
 
 ![Build Status](https://travis-ci.org/rsandor/traversal.svg?branch=master)
 [![Dependency Status](https://david-dm.org/rsandor/traversal.svg)](https://david-dm.org/rsandor/traversal)
 [![devDependency Status](https://david-dm.org/rsandor/traversal/dev-status.svg)](https://david-dm.org/rsandor/traversal#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/traversal.png?compact=true)](https://nodei.co/npm/traversal/)
-
-Modular recursive tree traversals, by Ryan Sandor Richards
-
-## Installation
-`npm install traversal`
 
 ## Introduction
 
