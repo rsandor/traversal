@@ -50,13 +50,13 @@ right child
 
 ## Documentation
 
-### traversal([helpers])
+### traversal( [ helpers ] )
 
 Instantiates a new tree traversal object.
 
 #### Parameters
 
-* helpers (*Array*, optional) - List of node properties for which to make helper
+* *Array* `helpers` (optional) - List of node properties for which to make helper
   methods.
 
 #### Example
@@ -67,6 +67,51 @@ var myTraversal = traversal(['type'])
   })
   .visit(function (node) {
     console.log('Just another node...');
+  });
+```
+
+### .visit(fn)
+
+Define the default visit function, which performs some operation on a node when
+it is visited during the traversal.
+
+#### Parameters
+
+* *function* `fn(node, recur, depth)` - Function to apply when visiting a node
+  during a traversal. `node` is the node being visited, `recur` is a method that
+  can be called to recur on child nodes, and `depth` is the depth in the tree
+  at the given node.
+
+#### Examples
+```js
+// Traverse a binary tree and sum the value of each node
+var sum = traversal()
+  .visit(function (node, recur) {
+    var value = node.value;
+    if (node.left) {
+      value += recur(node.left);
+    }
+    if (node.right) {
+      value += recur(node.right);
+    }
+    return value;
+  })
+  .walk(someBinaryTree);
+```
+
+```js
+// Traverse a tree and log each node using whitespace to denote depth
+traversal()
+  .visit(function (node, recur, depth) {
+    var indent = '';
+    for (var i = 0; i < depth; i++) {
+      indent += '  ';
+    }
+    console.log(indent + node.type);
+    if (node.children) {
+      // Recur over each of the children of this node
+      recur.each(node.children);
+    }
   });
 ```
 
