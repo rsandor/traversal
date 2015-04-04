@@ -1,6 +1,6 @@
 {
   "name": "traversal",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Modular recursive tree traversals.",
   "main": "index.js",
   "scripts": {
