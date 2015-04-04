@@ -1,5 +1,8 @@
 # Traversal
-By Ryan Sandor Richards
+
+![Build Status](https://travis-ci.org/rsandor/traversal.svg?branch=master)
+
+Modular recursive tree traversals, by Ryan Sandor Richards
 
 ## Installation
 `npm install traversal`
