@@ -1,10 +1,12 @@
 {
   "name": "traversal",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Modular recursive tree traversals.",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'NOT IMPLEMENTED'",
+    "lint": "jshint index.js test/ lib/",
+    "lab": "lab -v -c test/*",
+    "test": "jshint index.js test/ lib/ && lab -v -c test/*",
     "build": "gulp js",
     "docs": "jsdoc -o docs lib/"
   },
@@ -29,7 +31,7 @@
   "devDependencies": {
     "array-tools": "^1.6.6",
     "browserify": "^9.0.3",
-    "code": "^1.3.0",
+    "code": "^1.4.0",
     "concat": "^1.0.0",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
