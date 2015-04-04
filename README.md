@@ -70,6 +70,37 @@ var myTraversal = traversal(['type'])
   });
 ```
 
+### .walk(tree)
+
+Perform the traversal on a given tree.
+
+#### Parameters
+
+* *Object* tree - Root node of the tree to traverse.
+
+#### Example
+```js
+// Setup the traversal
+var total = 0;
+var myTraversal = traversal()
+  .visit(function (node, recur) {
+    total += node.value;
+  })
+  .postorder('children');
+
+// Perform the tree traversal, or "walk" a tree...
+myTraversal.walk({
+  value: 10,
+  children: [
+    { value: 20 },
+    { value: 30 },
+  ]
+});
+
+// Outputs 60
+console.log(total);
+```
+
 ### .visit(fn)
 
 Define the default visit function, which performs some operation on a node when
@@ -112,6 +143,116 @@ traversal()
       // Recur over each of the children of this node
       recur.each(node.children);
     }
+  });
+```
+
+### .preorder(propertyName, ...)
+
+Adds node property names to the traversal that should be recursively traversed
+*after* the node has been visited (read more about
+[preorder traversals](http://en.wikipedia.org/wiki/Tree_traversal#Pre-order)).
+
+#### Parameters
+
+* *string...* propertyName - One or more property names that should be
+  automatically recurred upon when performing the traversal.
+
+#### Examples
+```js
+traversal()
+  .visit(function (node) {
+    console.log(node.value);
+  })
+  // Automatically traverse the left and right properties of each node.
+  .preorder('left', 'right');
+```
+
+```js
+traversal()
+  // You can even traverse arrays!
+  .preorder('children')
+```
+
+### .postorder(properName, ...)
+
+Adds node property names to the traversal that should be recursively traversed
+*before* the node has been visited (read more about
+[postorder traversals](http://en.wikipedia.org/wiki/Tree_traversal#Post-order)).
+
+#### Parameters
+
+* *string...* propertyName - One or more property names that should be
+  automatically recurred upon when performing the traversal.
+
+#### Examples
+
+```js
+traversal()
+  .visit(function (node) {
+    console.log(node.value);
+  })
+  // Postorder visit the left and right properties of each node
+  .postorder('left', 'right');
+```
+
+```js
+traversal()
+  // Postorder traverse an array of nodes
+  .preorder('children')
+```
+
+### .property(propertyName, propertyValue, fn)
+
+Defines a new visitor that only applies to nodes that have a given property set
+to the given value. If `node` is the node currently being visited in the
+traversal, then this will only apply if `node[propertyName] === propertyValue`.
+
+#### Parameters
+
+* *String* `propertyName` - Name of the property for which to define the custom
+   visitor function.
+* *mixed* `properyValue` - Value of the propery for which to apply the custom
+  visitor function.
+* *function* fn - The visitor function to apply when
+  `node[propertyName] === propertyValue`
+
+#### Example
+```js
+// Traversal that treats node.type === 'root' as a special case
+traversal()
+  .property('type', 'root', function (root, recur) {
+    console.log("Root node!");
+    recur.each(root.children);
+  })
+  .visit(function (node) {
+    console.log("Regular, non-root node.");
+    if (node.children) {
+      recur.each(node.children);
+    }
+  });
+```
+
+### .addPropertyHelper(propertyName)
+
+Adds a new method to the traversal that makes it easier to define specific
+property visitors (as you would with `.property`).
+
+#### Parameters
+
+* *String* `propertyName` - Name of the property for which to make the helper.
+  Cannot be a reserved or already taken name on the traversal (e.g. `visit`).
+
+#### Example
+```js
+traversal()
+  // Create a type property helper for a traversal
+  .addPropertyHelper('type')
+  // Use it to create special visit functions
+  .type('root', function (node) {
+    console.log('Node type is root!')
+  })
+  .type('number', function (node) {
+    console.log('Node type is number!');
   });
 ```
 
