@@ -256,5 +256,77 @@ traversal()
   });
 ```
 
+### recur.each(nodes)
+
+Recurs further in the traversal for each node in a given array.
+
+#### Parameters
+
+* *Array* nodes - Array of nodes to traverse.
+
+#### Example
+```js
+traversal().visit(function (node, recur) {
+  if (Array.isArray(node.children)) {
+    recur.each(node.children);
+  }
+});
+```
+
+### recur.stop
+
+Stops automatic recursion defined by `.preorder` or `.postorder`.
+
+#### Example
+```js
+traversal(['type'])
+  .preorder('left', 'right')
+  .type('trinary', function (node, recur) {
+    recur.stop();
+    recur.each(node.children);
+  });
+```
+
+### recur.setReduce(fn)
+
+Sets the reduce function for `.each`.
+
+#### Parameters
+
+* *function* fn - Function to use during reduce after `.each`.
+
+#### Example
+```js
+// Sets value to 10
+var value = traversal()
+  .visit(function (node, recur) {
+    recur.setReduce(function (left, right) {
+      return left + right;
+    });
+    recur.setReudceInitial(0);
+    if (node.children) {
+      return node.value + recur.each(node.children)
+    }
+    return node.value;
+  })
+  .walk({
+    value: 1,
+    children: [
+      { value: 2 },
+      { value: 3 },
+      { value: 4 },
+    ]
+  });
+```
+
+### recur.setReduceInitial(value)
+
+Sets the initial value for the reduce used during `.each`
+
+#### Parameters
+
+* *mixed* value - Initial value for the reduce.
+
+
 ## License
 MIT
